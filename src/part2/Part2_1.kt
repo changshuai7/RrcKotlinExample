@@ -99,7 +99,7 @@ fun main() {
      * 在上面声明变量的语法格式中，程序
      *  -要么通过“：类型”的形式显式指定该变量的类型，
      *  -要么为该变量指定初始值 -- Kotlin 编译器将会根据该初始值确定变量的类型，
-     *  -不能声明变量时既不指定变量类型，也不指定变量初始值。
+     *  -不能 声明变量时既不指定变量类型，也不指定变量初始值。
      *  -声明变量时可以 既显式指定变量的类型，也指定该变量的初始值，但显式指定的变量类型必须与初始值的类型保持一致。
      *
 
@@ -130,7 +130,7 @@ fun main() {
      * Kotlin 的整型与Java 不同， Kotlin 的整型不是基本类型，而是引用类型（大致相当于Java的包装类），
      * Byte 、Short、Int 、Long 都继承了Number 类型，因此它们都可调用方法、访问属性。
      *
-     * 程序可通过访问不同整数类型的MIN VALUE 和MAX VALUE 属性来获取对应类型的最大值和最小值
+     * 程序可通过访问不同整数类型的 MIN_VALUE 和MAX_VALUE 属性来获取对应类型的最大值和最小值
      */
     integerFun()
 
@@ -178,7 +178,7 @@ fun main() {
      *
      * Kotlin 的浮点数有两种表示形式。
      *  -十进制数形式：这种形式就是简单的浮点数， 例如5.12 、512.0 、0.512 等。浮点数必须包含一个小数点，否则会被当成整数类型处理。
-     *  -科学计数形式：例如5.1 2e2 （即5 . 12 x 102 ） 、5. 1 2E2 （也是5 .1 2× 102 ）等。
+     *  -科学计数形式：例如5.12e2 （即5 . 12 x 102 ） 、5. 1 2E2 （也是5 .1 2× 102 ）等。
      *  必须指出的是：只有浮点型的数值才可以使用科学计数形式表示。例如51200 是一个Int型的值，但512E2 则是浮点型的值。
      *
      * 除此之外， Kotlin 还提供了3 个特殊的浮点型数值： 正无穷大、负无穷大和非数。
@@ -301,7 +301,7 @@ fun division() {
 
     var fenName1 = "rrc"
     var fenName2 = "rrc";
-    // var fenName3 = "rrc"; var fenName4 = "rrc"
+    var fenName3 = "rrc";  var fenName4 = "rrc"
 
     //Kotlin 允许一条语句可以跨多行。例如，如下语句都是正确的。
     var fenStr1 = "fKt"
@@ -398,8 +398,8 @@ fun integerFun() {
     //下面代码是正确的
     var bigValue2: Long = 299999999999999
 
-    println(Integer.MIN_VALUE)
-    println(Integer.MAX_VALUE)
+    println(Int.MIN_VALUE)
+    println(Int.MAX_VALUE)
 
     var b = 100 //默认是int型
     println(b.javaClass.toString())//输出的是int
