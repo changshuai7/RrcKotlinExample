@@ -1,12 +1,13 @@
 fun main() {
 
-    var arr = arrayOf<String>("a", "b", "ccccc", "dddd")
 
-    var filter: F<String> = {
-        it.length > 1
+    var a = arrayOf<String>("a", "b", "c")
+    var b = arrayOfNulls<String>(4)
+    val c = emptyArray<String>()
+
+    var d = Array<String>(4) { "$it = hello" }
+    for (item in d) {
+        println(item)
     }
-    val ff = arr.filter(filter)
-    println(ff)
 
 }
-typealias F<T> = (T) -> Boolean
