@@ -256,7 +256,42 @@ fun arrayFun9() {
 
 fun arrayFun10() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
-    //P80
+
+    var arr = arrayOfNulls<Array<Int>>(3)
+    arr[0] = arrayOf(9, 9, 9, 9)
+    arr[1] = arrayOf(8, 8, 8, 8)
+    arr[1] = Array(4) { it * 100 }
+    for (i in arr.indices) {
+        for (j in arr[0]!!.indices) {
+            print("${arr[i]?.get(j)}\t")
+        }
+        println()
+    }
+
+    println("-------------")
+
+    // 二行三列
+    // 100 200 300
+    // 200 300 400
+
+    var arr2 = Array(2) { i ->
+        IntArray(3) { j ->
+            (j + 1) * 100 + i * 100
+        }
+    }
+    for (i in arr2.indices) {
+        println(arr2[i].contentToString())
+    }
+
+    println("-------------")
+
+    var arr3 = arrayOf(arrayOfNulls<Int>(3), arrayOf(1, 2))
+    for (i in arr3.indices) {
+        println(arr3[i].contentToString())
+    }
+
 }
+
+
 
 
