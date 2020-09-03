@@ -6,6 +6,17 @@ package part5
  */
 fun main() {
 
+
+    /**
+     * 重点提示：
+     * 1、提示1：Kotlin的集合要面向可变集合、不可变集合编程，不要面向具体的集合实现类来编程
+     * 2、提示2：以set为例，如果想使用LinkedHashSet，建议使用linkedSetOf。
+     *      虽然使用setOf、mutableSetOf、都返回了LinkedHashSet，但这个是由Kotlin内部实现的，依然具有不可控的因素。
+     *      list和map同理
+     *
+     */
+
+
     /**
      *
      * Kotlin 的集合类同样由两个接口派生： Collection 和Map
@@ -117,6 +128,58 @@ fun main() {
      */
     listFun1()
 
+    /**
+     * List 同样提供了与Set 相似的集合操作方法。通常来说， Set 支持的操作， List 一般都能支持，它还增加了通过索引操作集合元素的方法。
+     *
+     * get ： 带operator 修饰的方法，因此可用“［］“运算符访问集合元素。
+     * indexOf ： 返回集合元素在List中的索引。
+     * lastIndexOf： 返回集合元素在List中最后一次的出现位置。
+     * sublist ： 返回List集合的 截断部分（from --> to）的子集合。
+     */
+    listFun2()
+
+    /**
+     * 使用mutableListOf()、arrayListOf()函数返回的List 集合都是可变
+     * 接下来就可以对该List 的元素执行添加、插入、删除、替换等操作了。
+     * 原来在可变的Set 中介绍的方法，可变的List 也完全支持，它还增加了一些根据索引执行插入、删除、替换的方法。
+     *
+     */
+    listFun3()
+
+    /**
+     * 与Java 相同的是， Kotlin 的Map 集合同样用于保存key-value 对；
+     * 与Java 不同的是， Kotlin的Map 集合也被分为可变的和不可变的。
+     */
+    mapFun1()
+
+
+    /**
+     * 使用Map的方法
+     */
+    mapFun2()
+
+    /**
+     * 遍历Map
+     * 遍历Map 集合时既可通过对key-value 对进行遍历，也可先遍历key ，再通过key 来获取对应的value 进行遍历。
+     * Kotlin 的Map 提供了operator 修饰的get（）方法，因此可通过“［］”运算符根据key 来获取value 。
+     * 此外， Map 也可直接用for-in 循环进行遍历，这时循环变量的类型是Entry （即key-value对）。
+     */
+    mapFun3()
+
+    /**
+     * 可变Map
+     * 使用mutableMapOf（）、hashMapOf（）、linkedMapOf（）、sortedMapOf（）函数返回的集合都是可变的，
+     * 其中后面三个函数返回的集合类型都是明确的，依次是HashMap 、LinkedHashMap 、TreeMap
+     *
+     * clear（）： 清空所有的key-value 对。
+     * put(key: K, value: V ）： 放入key-value 对。如果原来己有该key，那么新放入的value会覆盖原有的value 。
+     * putAll(from: Map<out K, V＞）：批量放入多个key-value 对。
+     * remove(key: K）：删除key-value 对
+     *
+     *
+     */
+    mapFun4()
+
 
 }
 
@@ -124,7 +187,9 @@ fun main() {
 fun setFun1() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     //不可变Set。本质是LinkedHashSet的实例（维护了存储顺序）
-    val set1 = setOf<String>("a", "b", "c")//集合元素按添加顺序排列
+    val set1 = setOf("a", "b", null)//集合元素按添加顺序排列
+    //setOf去除null值
+    val set11 = setOfNotNull("a", "b", null)
     //可变Set。本质是LinkedHashSet的实例（维护了存储顺序）
     val set2 = mutableSetOf<String>("a", "b", "c")
     //可变Set，本质是HashSet的实例（顺序取决于hashCode）
@@ -133,6 +198,10 @@ fun setFun1() {
     val set4 = linkedSetOf("a", "b", "c")
     //可变Set，本质是TreeSet的实例（顺序取决于自然排序、比较器排序等因素）
     val set5 = sortedSetOf("b", "a", "c")
+    //可变Set，本质是TreeSet的实例（这里传入了比较器的lambda）
+    val set6 = sortedSetOf<String>({ o1, o2 -> o1.length - o2.length }, "aaaa", "bb", "cccccc")
+
+
 
     println(set1.javaClass)
     println(set2.javaClass)
@@ -140,8 +209,10 @@ fun setFun1() {
     println(set4.javaClass)
     println(set5.javaClass)
 
-    println("se1的集合为：$set1")
-    println("se5的集合为：$set5")
+    println("set1的集合为：$set1")
+    println("set11的集合为：$set11")
+    println("set5的集合为：$set5")
+    println("set6的集合为：$set6")
 
 }
 
@@ -260,11 +331,172 @@ fun listFun1() {
     val list2 = listOfNotNull("a", "b", null)
     // 该函数返回可变的MutableList 集合 ，内存中实际上是java.util.ArrayList的实例
     val list3 = mutableListOf<String>("a", "b", "c")
+    val list4 = arrayListOf("a", "b", "c")
+
+    println(list1)
+    println(list2)
 
 
-//    println("${list1.javaClass} -- ${list2.javaClass} -- ${list3.javaClass} -- ")
+    println("listOf的类型：${list1.javaClass} \n" +
+            "listOfNotNull的类型：${list2.javaClass} \n" +
+            "mutableListOf的类型：${list3.javaClass}\n" +
+            "arrayListOf的类型：${list4.javaClass}")
 
 }
+
+
+fun listFun2() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    val list = listOf("a", "b", "c", "b", null)
+    println(list.get(0))//a
+    println(list[0])//a
+    println(list.indexOf("b"))//1
+    println(list.lastIndexOf("b"))//3
+    println(list.subList(3, list.size))//[b,null]
+
+    for (i in list.indices) {
+        print("${list[i]}\t")
+    }
+}
+
+
+fun listFun3() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    val list = arrayListOf<String>("a", "b", "c", "rrc", "ddd")
+    list.add("hello")
+    list.add(0, "kotlin")
+    println("添加完元素：$list")
+    list.removeAt(list.size - 1)
+    println("删除完元素：$list")
+    list[list.size - 1] = "good"
+    println("修改完元素：$list")
+    list.clear()
+    println("清空list：$list")
+}
+
+
+fun mapFun1() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    // vararg pairs: Pair<K, V>  ：Pair就是 a to b的形式，varargs是可变参数
+
+    // mapOf()、mutableMapOf)、linkedMapOf()创建的Map集合能维护元素的添加顺序，
+    // sortedMapOf() 函数创建的Map 集合会按照key 大小对key-value 对排序。
+    // 如果真正希望Map 集合不保证key-value 对的顺序，只有通过hashMapOf()函数创建Map集合才行。
+    // 这也是由Java 集合框架提供的HashMap 、LinkedHashMap 、TreeMap 实现类的特 征所决定的。
+
+    //该函数返回【不可变】的Map集合，内存中实际上是LinkedHashMap的实例
+    val map1 = mapOf("a" to 1, "b" to 2)
+    //该函数返回可变的Map集合，内存中实际上是LinkedHashMap的实例
+    val map2 = mutableMapOf("a" to 1, "b" to 2)
+
+    // 但从目前的实现来看，上面两个方法返回的Map 集合都会记住key-value 对的添加顺序->这是由LinkedHashMap 的特征所决定的。
+
+    //该函数返回可变的Map集合，内存中实际上是HashMap的实例
+    val map3 = hashMapOf("a" to 1, "b" to 2)
+    //该函数返回可变的Map集合，内存中实际上是LinkedHashMap的实例
+    val map4 = linkedMapOf("a" to 1, "b" to 2)
+    //该函数返回可变的Map集合，内存中实际上是TreeMap的实例
+    val map5 = sortedMapOf("a" to 1, "b" to 2)
+    val map6 = sortedMapOf({ o1, o2 -> o1.length - o2.length }, "aaa" to 1, "bb" to 2)
+
+    println(map1.javaClass)
+    println(map2.javaClass)
+    println(map3.javaClass)
+    println(map4.javaClass)
+    println(map5.javaClass)
+
+    println(map1)
+    println(map2)
+    println(map3)
+    println(map4)
+    println(map5)
+    println(map6)
+
+}
+
+fun mapFun2() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+    var map = mapOf("Java" to 86, "Kotlin" to 92, "Go" to 76)
+    println(map.all { it.key.length > 4 && it.value > 80 })//false
+    println(map.any { it.key.length > 2 && it.value > 80 })//true
+    println(map.filter { it.key.length > 4 })
+    println("Java" in map)//operator contains方法 决定
+
+    println("-----map遍历-----")
+    val list = map.map {
+        println("${it.key} -- ${it.value}")
+        "${it.key}-${it.value}"
+    }
+    println(list)
+
+
+    // 由于Map 集合提供了 operator 修饰的plus 、minus 方法，因此可使用＋、-运算符操作集合。
+    val map1 = mapOf("a" to 1, "b" to 2, "c" to 3)
+    val map2 = mapOf("c" to 3, "d" to 4, "e" to 5)
+
+    //求并集
+    println(map1 + map2)
+
+
+}
+
+
+fun mapFun3() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    val map = mapOf<String, Int>("a" to 1, "b" to 2, "c" to 3)
+
+    //map.iterator() //Iterator<Map.Entry<K, V>> = entries.iterator()
+    //  Map.Entry<K, V>
+    //  public val key: K
+    //  public val value: V
+
+
+    println("------map.entries------")
+    for (item in map.entries) {
+        println("key = ${item.key} value = ${item.value}")
+    }
+
+    println("------map迭代器------")
+    for (item in map) {
+        println("key = ${item.key} value = ${item.value}")
+    }
+
+    println("-----map.keys-------")
+    for (key in map.keys) {
+        println("key = $key value = ${map[key]}")
+    }
+
+
+    println("------解构赋值------")
+    for ((key, value) in map) {
+        println("key = $key value = $value")
+    }
+
+}
+
+fun mapFun4() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    val map = mutableMapOf<String, Int>("a" to 1, "b" to 2, "c" to 3)
+
+    map.put("d", 4)
+    map["e"] = 5
+    map.putAll(mapOf("ff" to 6, "gg" to 7))
+
+    println(map)
+
+    map.remove("gg")
+    println(map)
+
+    map.clear()
+    println(map)
+}
+
+
 
 
 
