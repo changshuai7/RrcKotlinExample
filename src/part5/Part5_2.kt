@@ -88,11 +88,38 @@ fun main() {
      */
     setFun3()
 
-    //p92
+    /**
+     * 可变Set
+     *
+     * 使用mutableSetOf（）、hashSetOf（）、linkedSetOf（）、sortedSetOf（）函数返回的集合都是可变的，
+     * 其中后面三个函数返回的集合类型都是明确的，依次是HashSet 、LinkedHashSet 、TreeSet 。
+     *
+     * add(element: E)  添加元素
+     * addAll(elements: Collection<E ＞）  批量添加多个元素。
+     * remove(element ：曰：删除指定元素，删除成功则返回true
+     * removeAll(elements: Collection<E ＞）：批量删除Set 集合中的多个元素。
+     * retainAll(elements: Collection<E ＞）： 只保留Set 集合中与elements 集合共有的元素（交集）。
+     * clear（）： 清空集合。
+     *
+     *
+     */
+    setFun4()
 
+    /**
+     * 此外Set 和MutableSet 都包含一个iterator()，
+     * 但普通Set 的iterator()方法返回的是Iterator 对象，该Iterator 对象只有hasNext()和next()两个方法
+     * 而MutableSet 的iterator()方法返回的是MutableIterator 对象，该对象除hasNext()和next()两个方法之外，还提供了一个remove()方法，该方法可用于在遍历时删除元素。
+     */
+    setFun5()
+
+    /**
+     * 正如前面所介绍的， Kotlin 同样并未真正实现List 集合，它只是通过别名借用了Java 体系中的ArrayList 集合
+     */
+    listFun1()
 
 
 }
+
 
 fun setFun1() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
@@ -184,6 +211,62 @@ fun setFun3() {
         print("${set.elementAt(index)}\t")
     }
 }
+
+fun setFun4() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+    var set = mutableSetOf("a", "b", "c")
+    set.add("d")
+    set.addAll(mutableSetOf("rrc1", "rrc2", "rrc3"))
+    println(set)
+
+
+    var set1 = mutableSetOf("q", "w", "t", "r", "d", "c")
+    set1.remove("q")
+    set1.removeAll(setOf("w", "t"))
+    println(set1)
+
+    var set2 = mutableSetOf("a", "b", "c")
+    var set3 = mutableSetOf("b", "c", "d")
+    set2.retainAll(set3)
+    println(set2)
+
+    set2.clear()
+    println(set2)
+
+}
+
+
+fun setFun5() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    var set = mutableSetOf("a", "b", "c")
+    val iterator = set.iterator()
+    while (iterator.hasNext()) {
+        var e = iterator.next()
+        println(e)
+        iterator.remove()
+    }
+    println(set)
+}
+
+
+fun listFun1() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+    //该函数返回不可变的List 集合.内存中实际上是：java.util.Arrays$ArrayList 的实例
+    val list1 = listOf("a", "b", null)
+    // 该函数返回不可变的List 集合。该函数与前一个函数的唯一区别是， 该函数会自动去掉传入的一系列参数中的null 值。
+    // 简而言之，该函数返回的List 集合 不包含null 值。
+    // 内存中实际上是java.util.ArrayList的实例
+    val list2 = listOfNotNull("a", "b", null)
+    // 该函数返回可变的MutableList 集合 ，内存中实际上是java.util.ArrayList的实例
+    val list3 = mutableListOf<String>("a", "b", "c")
+
+
+//    println("${list1.javaClass} -- ${list2.javaClass} -- ${list3.javaClass} -- ")
+
+}
+
+
 
 
 
