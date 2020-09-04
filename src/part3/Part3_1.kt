@@ -14,8 +14,20 @@ fun main() {
      * 其不仅能作用于普通数值类型的变量和常量，也可作用于任何自定义的类一一只要它们提供operator 修饰的、特定函数名的函数即可。
      * 本章节也会详细介绍Kotlin 运算符的这种强大功能。
      *
-     * 【a.xxx 带点的都是operator】
-     * 【a xxx b 不带点的都是infix】
+     */
+
+    /**
+     * infix
+     * 【中缀表达式】
+     * 中缀表达式就是一个比较特殊的函数，特殊之处在于它不需要普通函数的用 【对象名+点+函数名】 的方式调函数。而是 【对象+函数名+对象】 的方式。
+     * 中缀表达式函数需要用 infix 修饰符修饰。比如：for循环中，until 和step 都是中缀表达式函数
+     * 中缀表达式一般应用于两个相同类型对象之间。适合与两个对象比较。
+     * 以后讲到函数会重点介绍。
+     */
+
+    /**
+     * operator：
+     * 【重载操作符】：本节的重点。(operator 就是操作的意思)
      */
 
     /**
@@ -126,10 +138,12 @@ fun main() {
      * 比较运算符
      * a>b ==> a.compareTo(b)>0
      * a<b ==> a.compareTo(b)<0
-     * a=b ==> a.compareTo(b)=0
+     *
      *
      * a>=b ==> a.compareTo(b)>=0
      * a<=b ==> a.compareTo(b)<=0
+     *
+     * 注意：a ==b 不等于 a.compareTo(b) ==0
      *
      * 该方法是Comparable 接口中定义的方法，
      * 因此原来Java 类中支持使用compareTo() 方法比较大小的对象，都可使用比较运算符进行计算。
@@ -223,7 +237,7 @@ fun doubleOperateFun() {
     var a = 6
     var b = 2
     println(
-        """
+            """
             |a+b = ${a.plus(b)} 
             |a-b = ${a.minus(b)} 
             |a*b = ${a.times(b)} 
@@ -235,7 +249,7 @@ fun doubleOperateFun() {
     println()
 
     println(
-        """
+            """
             |a+b = ${a + b} 
             |a-b = ${a - b} 
             |a*b = ${a * b} 
@@ -330,13 +344,13 @@ fun equalFun() {
     val s2 = String(StringBuffer("abc"))
 
     println(
-        """
-        ${s1 == s2}
-        ${s1.equals(s2)}
-        ${s1 === s2}
+            """
+        ${s1 == s2}//true
+        ${s1.equals(s2)}//true
+        ${s1 === s2}//false
         """.trimIndent()
     )
-    println(null.equals(null))
+    println(null.equals(null))//true
 }
 
 fun compareToFun() {
