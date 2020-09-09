@@ -46,10 +46,12 @@ fun main() {
 
 
     /**
-     * 二、但表达式函数
+     * 二、单表达式函数
      * 在某些情况下，函数只是返回单个表达式，此时可以省略花括号井在等号（＝）后指定函数体即可。
      * 这种方式被称为单表达式函数。
-     * 对于单表达式函数而言，编译器可以推断出函数的返回值类型，因此Kotlin 允许省略声明函数的返回值类型
+     * 对于单表达式函数而言，编译器可以推断出函数的返回值类型，因此Kotlin 【允许省略声明函数的返回值类型】
+     *
+     * 综合一句话：单表达式，其实就是对单行函数的一种简写，省略了函数返回值，省略了return关键字。
      */
     println(fun21(1, 2))
     println(fun22(1, 2))
@@ -195,13 +197,22 @@ fun main() {
 
     /**
      * 九、使用函数作为形参类型
+     *
+     * 有时候需要定义一个函数， 该函数的大部分计算逻辑都能确定，但某些处理逻辑暂时无法确定
+     * 这意味着某些程序代码需要动态改变，如果希望调用函数时能动态传入这些代码
+     * 就需要在函数中定义函数类型的形参，这样即可在调用该函数时传入不同的函数作为参数，从而动态改变这些代码。
+     *
+     * Kotlin 支持像使用其他类型一样使用函数类型，因此完全可以在函数中定义函数类型的形参。
      */
     fun91()
 
+    /**
+     * 使用函数类型作为返回值类型
+     */
+    fun92()
+
 
 }
-
-
 
 
 fun fun11(): String {
@@ -361,16 +372,102 @@ fun fun82() {
 
     println(f1("rrc", 12))
     f2()
+
     /**
-     * 当直接访问一个函数的函数引用，而不是调用函数时，【需要在函数名前添加两个冒号】，而且不能在函数后面添加圆括号
+     * 注意：这里的ff1和f1是不一样的，ff1是函数名，并非函数的引用。::ff1才是函数的引用，f1也是引用，是一种函数类型的引用。
+     * 虽然二者都可以直接通过()调用函数，但是只有引用类型（其实就是内存地址）才可以作为参数传值。
+     */
+
+    /**
+     * 【当直接访问一个函数的函数引用，而不是调用函数时】，【需要在函数名前添加两个冒号】，而且不能在函数后面添加圆括号
      * 旦添加圆括号，就变成了调用函数，而不是访问函数引用。
      * 除此之外，程序还可使用函数类型作为形参类型和返回值类型。
      */
 }
 
 fun fun91() {
-    //p113 , 6.5.2
+
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    fun f1(x: Int): Int = x * x
+
+    fun f2(x: Int): Int = x + x;
+
+    var arr = arrayOf(1, 2, 3, 4, 5)
+    val funMap1 = funMap(arr, ::f1)
+    var funMap2 = funMap(arr, ::f2)
+    println(funMap1.contentToString())
+    println(funMap2.contentToString())
+
+    /**
+     * 从上面介绍不难看出，定义了函数类型的形参后，就可以在调用函数时动态地传入函数一
+     * 实际上可以动态地改变被调用函数的部分代码。
+     */
+
 }
+
+fun funMap(arr: Array<Int>, fn: (Int) -> Int): Array<Int> {
+
+    val result = Array<Int>(arr.size) { 0 }
+
+    for (index in arr.indices) {
+        result[index] = fn(arr[index])
+    }
+    return result
+
+}
+
+
+fun fun92() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    println((funGetFunc1("times"))(5))
+    println((funGetFunc2("times"))(5))
+    println((funGetFunc3("times"))(5))
+
+}
+
+fun funGetFunc1(type: String): (Int) -> Int {
+    fun f1(x: Int): Int {
+        return x + x
+    }
+
+    fun f2(x: Int): Int {
+        return x * x
+    }
+
+    fun f(x: Int): Int {
+        return x
+    }
+
+    return when (type) {
+        "plus" -> ::f1
+        "times" -> ::f2
+        else -> ::f
+    }
+}
+
+fun funGetFunc2(type: String): (Int) -> Int {
+    return when (type) {
+        "plus" -> fun(x: Int) = x + x
+        "times" -> fun(x: Int) = x * x
+        else -> fun(x: Int) = x
+
+    }
+
+}
+
+fun funGetFunc3(type: String): (Int) -> Int {
+    return when (type) {
+        "plus" -> { x -> x + x }
+        "times" -> { x -> x * x }
+        else -> { x -> x }
+    }
+}
+
+
+
+
 
 
 
