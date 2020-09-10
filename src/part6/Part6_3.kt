@@ -23,14 +23,12 @@ fun main() {
      * 三、匿名函数和Lambda 表达式的return
      *
      * 匿名函数的return 则用于返回该函数本身
-     * 而Lambda表达式的return 用于返回它所在的函数，而不是返回Lambda 表达式（因此一般不会在Lambda 表达式中使用return 。）
+     * 而Lambda表达式的return用于返回它所在的函数，而不是返回Lambda 表达式（因此一般不会在Lambda 表达式中使用return 。）
+     *
+     * 可以理解为：【return语句默认为跳出最近的函数，即第一个有fun关键字的函数】
      */
     myFun3()
 
-    /**
-     * 四、
-     */
-    myFun4()
 }
 
 
@@ -75,16 +73,18 @@ fun myFun2() {
 fun myFun3() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
-    re1()
+    re1()//abc
     println()
-    re2()
+    re2()//a
+    println()
+    re3()//abc
 }
 
 fun re1() {
     val list = listOf<String>("a", "b", "c")
     list.forEach(fun(item) {
         print(item)
-        return
+        return//只会结束匿名函数，fun(item)...
     })
 }
 
@@ -93,16 +93,40 @@ fun re2() {
 
     list.forEach {
         print(it)
-        return
-        //return@forEach //如果使用限定返回，此时return 只是返回传给forEach 方法的Lambda 表达式
+        return //会结束整个re2()的函数：fun re2()
     }
 
-    //上面代码之所以可以在Lambda 表达式中直接使用return，
+    // 上面代码之所以可以在Lambda 表达式中直接使用return，
     // 是因为该forEach 方法使用了inline 修饰（内联函数，以后介绍）
 }
 
+fun re3() {
+    val list = listOf<String>("a", "b", "c")
 
-fun myFun4() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+    list.forEach {
+        print(it)
+
+        return@forEach Unit //如果使用限定返回，此时return 只是返回传给forEach 方法的Lambda 表达式
+    }
+
+    // 注意：一个函数中有若干函数类型的参数，那么每个函数参数都会打一个类名标签（也可以手动打标签，那么系统自动打的类名表情失效）
+
+    println("-----")
+
+    list.forEach abc@{
+        print(it)
+
+        return@abc Unit //如果使用限定返回，此时return 只是返回传给forEach 方法的Lambda 表达式
+        // return@forEach //类名标签失效，这行代码会报错
+    }
+
+
+    /**
+     * 注意：
+     * 1、如有有return，则lambda表达式最后一行代码作为返回值就失效了
+     * 2、return@label 返回内容：可以返回具体的内容
+     * 3、一个函数中有若干函数类型的参数，那么每个函数参数都会打一个类名的默认标签，并且可直接使用
+     */
+
 }
 
