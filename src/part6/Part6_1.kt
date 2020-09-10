@@ -214,6 +214,14 @@ fun main() {
      */
     fun92()
 
+    /**
+     * 十、尾递归函数
+     * Kotlin 还支持一种尾递归函数的编程方式，当函数将调用自身作为它执行的最后一行代码，且递归调用后没有更多代码时，可使用尾递归语法。
+     * 另外，尾递归不能在异常处理的try、catch 、finally 块中使用。
+     * 尾递归函数需要使用tailrec 修饰。
+     */
+    fun101()
+
 
 }
 
@@ -466,4 +474,33 @@ fun funGetFunc3(type: String): (Int) -> Int {
         "times" -> { x -> x * x }
         else -> { x -> x }
     }
+}
+
+
+fun fun101() {
+
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    fun fact(x: Int): Int {
+        if (x == 1) {
+            return 1
+        } else {
+            return x * fact(x - 1)
+        }
+    }
+
+    // 调用自身作为其执行体的最后一行代码，且递归调用后没有更多代码，
+    // 因此可以将该函数改为尾递归语法。
+
+    tailrec fun factRec(x: Int, total: Int = 1): Int {
+        if (x == 1) {
+            return total
+        } else {
+            return factRec(x - 1, total * x)
+        }
+    }
+
+    val factRec = factRec(5)
+    println(factRec)
+
 }
