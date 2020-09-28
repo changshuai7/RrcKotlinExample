@@ -1,6 +1,6 @@
 package part5
 
-
+import kotlin.collections.Iterable
 /**
  * 【集合的使用】
  */
@@ -76,7 +76,7 @@ fun main() {
      *
      * --------------------------
      *
-     * Kotlin 在只币4 平台上并未真正实现HashSet 、LinkedHashSet 、HashMap 、LinkedHashMap 、ArrayList、
+     * Kotlin 中并未真正实现HashSet 、LinkedHashSet 、HashMap 、LinkedHashMap 、ArrayList、
      * 只是指定了一个类型别名而己，这样就直接借用了Java 的这些集合类。此外，Kotlin为这些集合类扩展了更多的方法，因此用起来更方便。
      *
      */
