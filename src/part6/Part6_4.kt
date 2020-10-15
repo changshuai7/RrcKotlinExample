@@ -85,7 +85,7 @@ fun inLineFun1() {
     println(arr1.contentToString())
 
     //上述代码相当于如下：
-    // 编译器会将lambda函数直接复制粘贴到inline函数中,同事inline函数mapArr()也会复制到被调用处
+    // 编译器会将lambda函数直接复制粘贴到inline函数中,同时inline函数mapArr()也会复制到被调用处
     /*
     fun mapArr(arr: Array<Int>, fn: (Int) -> Int): Array<Int> {
        val resultArr = Array<Int>(arr.size) { 0 }
