@@ -76,11 +76,37 @@ fun main() {
     field4()
 
     /**
-     * 延迟初始化属性 p149
+     * 延迟初始化属性
+     *
+     * Kotlin 要求所有属性必须由程序员显式初始化
+     * 一一要么在定义该属性时赋初始值；要么在构造器中对该属性赋初始值。
+     * 但在某些时候，这不是必需的。比如，我们可能通过依赖注入为属性设置初始值，或者在单元测试的setUp 方法中初始化该属性……
+     * 总之，并不需要在定义属性时或在构造器中对属性执行初始化。
+     * Kotlin 提供了 lateinit 修饰符来解决属性的延迟初始化。使用 lateinit 修饰的属性，可以在定义该属性时和在构造器中都不指定初始值。
+     *
+     *
+     * 对lateinit 修饰符有以下限制。
+     * 》lateinit 只能修饰在类体中声明的可变属性（使用val 声明的属性不行，在主构造器中声明的属性也不行）。
+     * 》lateinit 修饰的属性不能有自定义的getter和setter方法。
+     * 》lateinit 修饰的属性必须是非空类型。
+     * 》lateinit 修饰的属性不能是原生类型（即Java 的8 种基本类型对应的类型）。
+     *
+     * 【注意：与Java 不同的是， Kotlin 不会为属性执行默认初始化！！！！！！！】
+     * 因此，如果在lateinit 属性赋初始值之前访问它，程序将会引发“ lateinit property name has not been initialized ” 异常。
      */
     filed5()
-}
 
+
+    /**
+     * 内联属性
+     *
+     * inline 修饰符可修饰没有幕后字段的属性的getter 或setter 方法
+     * ①既可单独修饰属性的getter 或setter 方法；
+     * ②也可修饰属性本身，这相当于同时修饰该属性的getter和setter方法。
+     * 对于使用inline 修饰的getter、setter方法，就像前面介绍的内联函数一样，程序在调用getter或setter方法时也会执行内联化。
+     */
+    field6()
+}
 
 
 fun field1() {
@@ -204,7 +230,7 @@ fun field4() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     class User(name: String, age: Int) {
         //_name该属性就是一个幕后属性，
-        //Kotlin 不会为该属性生成getter 、setter 方法，因此程序无法直接访问对象的＿name 属性。
+        //Kotlin 不会为该属性生成getter 、setter 方法（但是会生成field字段），因此程序无法直接访问对象的＿name 属性。
         private var _name = name//幕后属性
         var name: String
             set(newName) {
@@ -226,6 +252,32 @@ fun field4() {
 fun filed5() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
+    class User {
+        lateinit var name: String
+        //lateinit var age: Int //不可以是基本数据类型（对应Java中的8种数据类型：byte short int long | boolean | char | double float）
+    }
+
+    var u: User = User()
+    //println(u.name)//报错：Exception in thread "main" kotlin.UninitializedPropertyAccessException: lateinit property name has not been initialized
+    u.name = "RRC"
+    println(u.name) //u.name初始化以后再调用，即可正常
+
+}
+
+fun field6() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    class User(var first: String, var last: String) {
+
+        /*inline*/ var fullName: String    //计算属性，非幕后字段，可以执行内联化
+            inline get() = "$first.$last"  //程序读取属性时，会被内联化
+            inline set(full) {             //程序设置属性时，会被内联化
+                val split = full.split(".")
+                first = split[0]
+                last = split[1]
+            }
+
+    }
 }
 
 
