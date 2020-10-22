@@ -1,9 +1,16 @@
 fun main(args: Array<String>) {
 
 
-    var a :Int? = 0
-    println(a?.javaClass)
+    val c: Cls = Cls("a", 12)
 
+}
+
+open class Cls {
+
+    constructor(name: String, age: Int) {
+        println("a")
+
+    }
 }
 
 
