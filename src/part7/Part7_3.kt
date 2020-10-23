@@ -148,7 +148,7 @@ open class Outer {
 }
 
 class SubClass : Outer() {
-    // a可以访问
+    // a不可以访问
     // b、c、d 可以访问
     // Nested和e可以访问
 
