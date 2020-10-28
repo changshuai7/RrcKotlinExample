@@ -4,7 +4,7 @@ package part8
  *
  * 八、面向对象(下)
  *
- * 8.1、final
+ * 8.2、final
  *
  */
 fun main() {
