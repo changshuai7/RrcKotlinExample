@@ -105,7 +105,7 @@ fun main() {
     与前面说的委托属性保持一致，局部变量的委托对象同样要遵守一定的要求：
     对于只读属性而言，同样需要实现operator 修饰的getValue方法，对于读写属性，需要实现operator修饰的getValue和setValue方法
 
-    唯一区别的是：该方法的第一个参数是Nothing？类型， Nothing 是Kotlin 提供的一个特殊的类，专门用于代表永不存在的对象。
+    唯一区别的是：该方法的第一个参数是【Nothing？】类型， Nothing 是Kotlin 提供的一个特殊的类，专门用于代表永不存在的对象。
     【由于局部变量不属于任何对象】 因此它的委托对象的getValue、setValue方法的第一个参数自然也就不存在了，因此Kotlin 使用Nothing ？来声明getValue()/setValue方法的第一个参数的类型。
 
      */
