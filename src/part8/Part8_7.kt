@@ -193,6 +193,7 @@ class ObjectExprType {
     }
 }
 
+//全局的对象表达式必须用private，因为实际上相当于存在于Part8_7Kt.class中
 private val aa = object {
     val name = "aa-name"
 }
