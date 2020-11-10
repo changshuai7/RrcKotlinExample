@@ -65,11 +65,6 @@ fun main() {
     annotation4()
 
     /**
-     *使用varargs修饰的属性，不管它的属性名是什么，系统为该属性指定属性值时，都不需要指定属性名，直接在注解中指定多个属性值即可
-     *TODO : 此条存在争议，实测 Kotlin 注解的属性不可以使用varargs修饰
-     */
-
-    /**
     如果将一个注解作为另一个注解的属性值，那么在使用注解时不需要以＠作为前缀。
      */
     annotation5()
@@ -81,6 +76,12 @@ fun main() {
     annotation6()
 
 
+    /**
+     *使用vararg修饰的属性【注意：不是varargs】，不管它的属性名是什么，系统为该属性指定属性值时，都不需要指定属性名，直接在注解中指定多个属性值即可
+     */
+    annotation7()
+
+
 }
 
 
@@ -89,7 +90,6 @@ annotation class TestAnt
 
 @TestAnt
 fun annotation1() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     @TestAnt
     class User @TestAnt constructor(@TestAnt val name: String, val age: Int) {
@@ -104,7 +104,6 @@ fun annotation1() {
 annotation class TestAnt1(val name: String, val age: Int)
 
 fun annotation2() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     //使用带属性的注解时，需要为属性指定属性值
     @TestAnt1("hello", 12)
@@ -121,7 +120,6 @@ fun annotation2() {
 annotation class TestAnt2(val name: String = "rrc", val age: Int = 100)
 
 fun annotation3() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     //使用带属性的注解
     //因为它的属性有默认值，所以可以不为该属性指定值
@@ -132,7 +130,6 @@ fun annotation3() {
 annotation class TestAnt3(val value: String = "rrc")
 
 fun annotation4() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     //为value 属性指定属性值时无须带属性名
     @TestAnt3("hello")
@@ -144,7 +141,6 @@ annotation class TestAnt4(val value: String)
 annotation class TestAnt5(val name: String, val an: TestAnt4)
 
 fun annotation5() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     @TestAnt5("hello", TestAnt4("hello"))
     class User
 }
@@ -152,9 +148,16 @@ fun annotation5() {
 annotation class TestAnt6(val cls1: KClass<*>, val cls2: KClass<out Number>)
 
 fun annotation6() {
-    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     @TestAnt6(Integer::class, Double::class)
     class User
 }
+
+annotation class TestAnt7(vararg val info: String)
+
+fun annotation7() {
+    @TestAnt7("a", "b", "c")
+    class User
+}
+
 
 
