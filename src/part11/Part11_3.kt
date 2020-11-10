@@ -131,10 +131,11 @@ fun useAnnotation2() {
 
     // 其实注解十分简单，它们就是对源代码增加的一些特殊标记
     // 这些特殊标记可通过反射获取，当程序获取到这些特殊标记后可以做l 出相应的处理（当然也可以完全忽略这些注解） 。
-    checkTestable<NeedTestCls>()
+    processTestable<NeedTestCls>()
 }
 
-inline fun <reified T : Any> checkTestable() {
+//处理注解
+inline fun <reified T : Any> processTestable() {
 
     val cls = T::class//拿到class对象
     val functions = cls.functions//拿到所有方法
@@ -190,16 +191,17 @@ class TestActionCls {
 
 }
 
+//处理注解
 inline fun <reified T : Any> processTestAction() {
     val functions = T::class.functions
     for (f in functions) {//遍历T内的所有方法
-        if (f.hasAnnotation<ActionAn>()) {//如果存在ActionAn注解
-            //找到注解
-            val an = f.findAnnotation<ActionAn>()
-            //找到注解的参数action
-            val action = an?.action
-            //f方法调用，传入注解内的action对象
-            f.call(T::class.createInstance(), action?.createInstance())
+        //找到注解
+        val an = f.findAnnotation<ActionAn>()
+        //找到注解的参数action
+        val action = an?.action
+        //f方法调用，传入注解内的action对象
+        if (action != null) {
+            f.call(T::class.createInstance(), action.createInstance())
         }
     }
 }
