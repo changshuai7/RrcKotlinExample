@@ -25,7 +25,7 @@ fun main() {
     如果只有getter 方法，那么就是只读属性；
     如果有getter和setter方法，那么就是读写属性。
      */
-    reflex1()
+    javaCallKt1()
 
     /**
     ============== void 和调用名为关键字的成员 ==============
@@ -35,7 +35,7 @@ fun main() {
     因此可能出现一种情况： Java 的类名、接口名、方法名等是Kotlin 的关键字。此时就需要使用反引号（就是键盘上数字1 左边的那个键）对关键宇进行转义。
 
      */
-    reflex2()
+    javaCallKt2()
 
     /**
     ============== Katlin 的己映射类型 ==============
@@ -81,7 +81,7 @@ fun main() {
     因此在Kotlin 中使用is 运算符进行类型检测时只能检测星号投影（相当于Java 的原始类型〉，【不能检测泛型信息】
 
      */
-    reflex3()
+    javaCallKt3()
 
 
     /**
@@ -102,7 +102,7 @@ fun main() {
 
     注意：IntArray可以替代int[]，但是Array<Int>不可以替代int[]
      */
-    reflex4()
+    javaCallKt4()
 
 
     /**
@@ -111,7 +111,7 @@ fun main() {
     对于参数个数可变的方法， Java 可以直接传入一个数组，但Kotlin 不行。
     Kotlin 要求只能传入多个参数值，但也可通过使用 "*" 解开数组的方式来传入多个 数组元素 作为参数值。
      */
-    reflex5()
+    javaCallKt5()
 
 
     /**
@@ -128,7 +128,7 @@ fun main() {
     又因为Any只声明了toString()、hashCode()和equals()方法，因此需要考虑如何使用java.lang.Object 类中其他方法的问题。
 
      */
-    reflex6()
+    javaCallKt6()
 
 
     /**
@@ -137,7 +137,7 @@ fun main() {
     虽然Kotlin 本身没有提供static 关键字，但Kotlin 提供了伴生对象来实现静态成员，
     因此Java 类中的静态成员都可通过伴生对象的语法来调用。
      */
-    reflex7()
+    javaCallKt7()
 
     /**
     ============== Kotlin 的 SAM转换 ==============
@@ -148,7 +148,7 @@ fun main() {
     与Java 类似， Lambda 表达式只能创建函数式接口的对象，不能创建抽象类的对象，即使 该抽象类只有一个抽象方法也不行；
     同理， Kotlin 的Lambda 表达式也只能创建函数式接口的 对象，不能创建抽象类的对象。
      */
-    reflex8()
+    javaCallKt8()
 
 
     /**
@@ -157,11 +157,11 @@ fun main() {
     如果要在Java 中使用JNI ，则应该使用native 修饰该方法，表明该方法将会交给平台本地的C 或C＋＋代码来实现。
     Kotlin 同样支持该机制，只不过Kotlin 不使用native 关键字，而是使用 external 关键字。
      */
-    reflex9()
+    javaCallKt9()
 }
 
 
-fun reflex1() {
+fun javaCallKt1() {
 
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
@@ -182,14 +182,14 @@ fun reflex1() {
     println(cls.isGood)
 }
 
-fun reflex2() {
+fun javaCallKt2() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     val cls = JavaClsTest2()
     cls.`in`("hello")
 }
 
-fun reflex3() {
+fun javaCallKt3() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     val list = listOf(1, 2, 3)
     //println(list is List<String>)//is 判断不能检测泛型参数
@@ -197,7 +197,7 @@ fun reflex3() {
 
 }
 
-fun reflex4() {
+fun javaCallKt4() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     val arr1 = arrayOf<Int>(1, 2, 3)
@@ -209,7 +209,7 @@ fun reflex4() {
     println(cls.sum(arr2)) // TODO cls点method1的时候，提示里的感叹号是什么意思
 }
 
-fun reflex5() {
+fun javaCallKt5() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     val cls = JavaClsTest3()
     cls.test1(1, 2, 3) //传入的是vararg
@@ -219,7 +219,7 @@ fun reflex5() {
     cls.test1(*arr1) //*arr2不行
 }
 
-fun reflex6() {
+fun javaCallKt6() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
 
@@ -280,7 +280,7 @@ fun reflex6() {
     }
 }
 
-fun reflex7() {
+fun javaCallKt7() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     val cls = JavaClsTest3()
     JavaClsTest3.age = 12
@@ -288,7 +288,7 @@ fun reflex7() {
 }
 
 
-fun reflex8() {
+fun javaCallKt8() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
     //Runnable就是函数式接口
@@ -296,7 +296,7 @@ fun reflex8() {
 
 }
 
-fun reflex9() {
+fun javaCallKt9() {
     //该函数使用了external 修饰，因此该函数不能指定函数体。该函数的函数体将会由平台本 地的C 或C ＋＋代码来实现。
     external fun foo(x: Int): Double
 }
