@@ -84,7 +84,7 @@ fun metaAnnotation1() {
 @Target(AnnotationTarget.CLASS)//只能修饰类
 annotation class MetaAnt2
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FIELD)//只能修饰类
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FIELD)//修饰类和方法
 annotation class MetaAnt3
 
 fun metaAnnotation2() {
