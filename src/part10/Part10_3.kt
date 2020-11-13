@@ -7,11 +7,11 @@ fun main() {
 
     一、声明处型变：
 
-    1、如果泛型只需要出现在方法的返回值声明中（不出现在形参声明中〉（构造方法除外），那么该方法就只是取出泛型对象
+    1、如果泛型只需要出现在方法的返回值声明中（不出现在形参声明中〉，那么该方法就只是取出泛型对象
     因此该方法就支持泛型协变（相当于通配符上限）：
     如果一个类的所有方法都支持泛型协变，那么该类的泛型参数可使用 out 修饰。
 
-    2、如果泛型只需要出现在方法的形参声明中（不出现在返回值声明中〉（构造方法除外），那么该方法就只是传入泛型对象
+    2、如果泛型只需要出现在方法的形参声明中（不出现在返回值声明中〉，那么该方法就只是传入泛型对象
     因此该方法就支持泛型逆变（相当于通配符下限）：
     如果一个类的所有方法都支持泛型逆变，那么该类的泛型参数可使用 in 修饰。
      */
@@ -55,29 +55,29 @@ fun xb1() {
          * 所以，如果用 T 为User 类声明属性，则只能声明为只读属性，否则， setter方法的形参类型是T ，这就不符合要求了。
          */
         //不能使用var，否则就有setter 方法 ，setter 方法会导致T 出现在方法形参中
-        private val info: T
+        val info: T
 
         constructor(info: T) {
             this.info = info
         }
 
 
-        fun getInfo(): T {
+        fun getMyInfo(): T {
             return this.info
         }
     }
 
     val u = User<String>("hello")
-    println(u.getInfo())
+    println(u.getMyInfo())
 
     // 一旦声明了泛型类支持协变，程序即可安全地将User<String＞ 、User<Int> 赋值给 User <Any>
     // 只要尖括号中的类型是Any 的子类即可
 
     val u1: User<Any> = User<String>("world")
-    println(u1.getInfo())
+    println(u1.getMyInfo())
 
     val u2: User<Any> = User<Int>(12)
-    println(u2.getInfo())
+    println(u2.getMyInfo())
 
 }
 
@@ -90,6 +90,7 @@ fun xb2() {
      */
     class Item<in T> {
 
+        //这里必须声明为private，否则外不可以读取数据info了。
         private var info: T
 
         constructor(info: T) {
@@ -110,13 +111,13 @@ fun xb2() {
 
     //上面程序中粗体字代码声明了一个泛型类， 且使用了in 修饰泛型形参，
     // 因此在该Item 类 的内部， T 只能出现在方法的形参声明中， 不能出现在方法的返回值声明中。
-    //一旦声明了泛型类支持逆变， 程序即可安全地将Item<Any＞、Item<CharSequence＞赋值给 User＜ 如ing＞ ， 只要尖括号中的类型是String 的父类即可，
+    //一旦声明了泛型类支持逆变， 程序即可安全地将Item<Any＞、Item<CharSequence＞赋值给 User＜String＞ ， 只要尖括号中的类型是String 的父类即可，
 
 
     /**
      * 总结：
      * 如果泛型T (或其他字母〉只出现在该类的方法的返回值声明中（T代表的是传出值），那么该泛型形参即可使用out 修饰T 。
-     * 如果泛型T C 或其他字母〉只出现在该类的方法的形参声明中C T 代表的是传入参数） ，那么该泛型形参即可使用in 修饰T
+     * 如果泛型T （或其他字母〉只出现在该类的方法的形参声明中（T 代表的是传入参数） ，那么该泛型形参即可使用in 修饰T
      */
 
 }
@@ -221,7 +222,7 @@ fun xb7() {
 
     /**
     如果泛型类型具有多个类型参数，那么每个类型参数都可以单独指星号投影。
-    假如声明了支持两个泛型参数的Foo<in T out U＞类型，则关于星号投影的解释以下。
+    假如声明了支持两个泛型参数的Foo<in T ,out U＞类型，则关于星号投影的解释以下。
     》对于Foo<*, String＞ ，其实相当于Foo<in Nothing, String＞。
     》对于Foo<Int，*> ，其实相当于Foo<Int, out Any？＞ 。
     》对于Foo＜*，*> ，其实相当于Foo<in Nothing, out Any？＞。
