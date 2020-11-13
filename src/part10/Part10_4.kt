@@ -185,6 +185,7 @@ fun genericFun5() {
     并且实现多个上限接口。
 
     由于在尖括号中只能指定一个上限，所以，如果要为泛型指定多个上限，则需要使用单独的where 子句
+    where子句写在方法整体的最后面（包括返回值的后面）
      */
 
     /**
@@ -196,8 +197,8 @@ fun genericFun5() {
 
     }
 
-    fun <T> testUser() where T : Number, T : Comparable<T>, T : Cloneable {
-
+    fun <T> testUser() :String where T : Number, T : Comparable<T>, T : Cloneable {
+        return ""
     }
 
 
