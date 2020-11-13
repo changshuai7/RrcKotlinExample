@@ -5,7 +5,7 @@ import part12.javacls.JavaClsTest2
 import part12.javacls.JavaClsTest3
 
 /**
- * 十二、Kotlin和Java的互调、反射
+ * 十二、Kotlin和Java的互调
  * 由于Kotlin 最初设计就是兼容Java平台的，因此Java 与Kotlin 相互可以平滑调用
  *
  * 1、Kotlin调Java

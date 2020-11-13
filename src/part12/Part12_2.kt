@@ -8,7 +8,7 @@ import kotlin.jvm.Throws
 
 
 /**
- * 十二、Kotlin和Java的互调、反射
+ * 十二、Kotlin和Java的互调
  *
  * 2、Java调Kotlin
  *
