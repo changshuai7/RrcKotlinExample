@@ -30,13 +30,13 @@ fun main() {
     -AnnotationTarget.TYPE_PARAMETER ：指定该策略的注解只能修饰泛型形参（目前暂时还不支持〉。
     -AnnotationTarget.PROPERTY ：指定该策略的注解只能修饰属性。
     -AnnotationTarget.FIELD ： 指定该策略的注解只能修饰宇段（包括属性的幕后宇段）。
-    -AnnotationTa 「get.LOCAL_VARIABLE ：指定该策略的注解只能修饰局部变量。
+    -AnnotationTarget.LOCAL_VARIABLE ：指定该策略的注解只能修饰局部变量。
     -AnnotationTarget.VALUE_PARAMETER ：指定该策略的注解只能修饰函数或构造器的形参。
     -AnnotationTarget.CONSTRUCTOR ： 指定该策略的注解只能修饰构造器。
     -AnnotationTarget.FUNCTION ： 指定该策略的注解只能修饰函数和方法（不包含构造器）。
-    -AnnotationTarget. PROPERTY_ GETTER ：指定该策略的注解只能修饰属性的getter方法。
-    -AnnotationTarget. PROPERTY一SETTER ：指定该策略的注解只能修饰属性的se 忧er方法。
-    -AnnotationTa 咱et.TYPE ： 指定该策略的注解只能修饰类型。
+    -AnnotationTarget.PROPERTY_ GETTER ：指定该策略的注解只能修饰属性的getter方法。
+    -AnnotationTarget.PROPERTY一SETTER ：指定该策略的注解只能修饰属性的se 忧er方法。
+    -AnnotationTarget.TYPE ： 指定该策略的注解只能修饰类型。
     -AnnotationTarget.EXPRESSION ： 指定该策略的注解只能修饰各种表达式。
     -AnnotationTarget.FILE ： 指定该策略的注解只能修饰文件。
     -AnnotationTarget.TYPEALIAS ：指定该策略的注解只能修饰类型别名。
