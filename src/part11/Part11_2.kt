@@ -25,7 +25,7 @@ fun main() {
     @Target 也只能修饰注解定义，用于指定被修饰的注解能修饰哪些程序单元。
     @Target 元注解包含一个类型为AnnotationTarget 数组的allowedTargets 属性，该属性的值只能是如下几个值组成的数组。
 
-    -Annotation Target.CLASS ： 指定该策略的注解只能修饰类。
+    -AnnotationTarget.CLASS ： 指定该策略的注解只能修饰类。
     -AnnotationTarget.ANNOTATION_ CLASS ：指定该策略的注解只能修饰注解。
     -AnnotationTarget.TYPE_PARAMETER ：指定该策略的注解只能修饰泛型形参（目前暂时还不支持〉。
     -AnnotationTarget.PROPERTY ：指定该策略的注解只能修饰属性。
