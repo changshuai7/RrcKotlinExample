@@ -19,11 +19,6 @@ package part0
  * 12、Kotlin和Java相互调用
  * 13、反射
  *
- *
- * 二、Kotlin高级
- * 三、Android中使用Kotlin
- * 四、JetPack + Kotlin + mvvm 综合应用
- *
  */
 fun main() {
     println("hello rrc!")
