@@ -1,7 +1,7 @@
 package part8
 
 import kotlin.properties.Delegates
-import kotlin.properties.PropertyDelegateProvider
+//import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -389,40 +389,41 @@ class PropLocal2 : ReadWriteProperty<Nothing?, Int> {
 fun entrust7() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
 
-    val c = Cls()
-    println(c.name)
-    c.name = "HelloWorld"
-    println(c.name)
+    // 委托工厂，新版Kotlin中已经删除
+//    val c = Cls()
+//    println(c.name)
+//    c.name = "HelloWorld"
+//    println(c.name)
 }
 
 
-class Cls {
-    var name: String by DelegateFactory()
-}
+//class Cls {
+//    var name: String by DelegateFactory()
+//}
 
 
-class DelegateFactory : PropertyDelegateProvider<Cls, ReadWriteProperty<Cls, String>> {
-    override fun provideDelegate(thisRef: Cls, property: KProperty<*>): ReadWriteProperty<Cls, String> {
+//class DelegateFactory : PropertyDelegateProvider<Cls, ReadWriteProperty<Cls, String>> {
+//    override fun provideDelegate(thisRef: Cls, property: KProperty<*>): ReadWriteProperty<Cls, String> {
+//
+//        println("Delegate工厂")
+//
+//        // 这里可以完成很多检查的工作  扩展性更高
+//
+//        return PropTest()
+//    }
+//}
 
-        println("Delegate工厂")
-
-        // 这里可以完成很多检查的工作  扩展性更高
-
-        return PropTest()
-    }
-}
-
-class PropTest : ReadWriteProperty<Cls, String> {
-    private var name: String = "默认值"
-    override fun setValue(thisRef: Cls, property: KProperty<*>, value: String) {
-        this.name = value
-    }
-
-    override fun getValue(thisRef: Cls, property: KProperty<*>): String {
-        return this.name
-    }
-
-}
+//class PropTest : ReadWriteProperty<Cls, String> {
+//    private var name: String = "默认值"
+//    override fun setValue(thisRef: Cls, property: KProperty<*>, value: String) {
+//        this.name = value
+//    }
+//
+//    override fun getValue(thisRef: Cls, property: KProperty<*>): String {
+//        return this.name
+//    }
+//
+//}
 
 /**
  *

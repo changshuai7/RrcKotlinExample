@@ -188,8 +188,8 @@ fun setFun1() {
     println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
     //不可变Set。本质是LinkedHashSet的实例（维护了存储顺序）
     val set1 = setOf("a", "b", null)//集合元素按添加顺序排列
-    //setOf去除null值
-    val set11 = setOfNotNull("a", "b", null)
+    //setOf去除null值,
+    //val set11 = setOfNotNull("a", "b", null) //此API新版的kotlin去掉了
     //可变Set。本质是LinkedHashSet的实例（维护了存储顺序）
     val set2 = mutableSetOf<String>("a", "b", "c")
     //可变Set，本质是HashSet的实例（顺序取决于hashCode）
@@ -210,7 +210,7 @@ fun setFun1() {
     println(set5.javaClass)
 
     println("set1的集合为：$set1")
-    println("set11的集合为：$set11")
+    //println("set11的集合为：$set11")
     println("set5的集合为：$set5")
     println("set6的集合为：$set6")
 
@@ -400,7 +400,8 @@ fun mapFun1() {
     val map4 = linkedMapOf("a" to 1, "b" to 2)
     //该函数返回可变的Map集合，内存中实际上是TreeMap的实例
     val map5 = sortedMapOf("a" to 1, "b" to 2)
-    val map6 = sortedMapOf({ o1, o2 -> o1.length - o2.length }, "aaa" to 1, "bb" to 2)
+    //新版以去掉
+    //val map6 = sortedMapOf({ o1, o2 -> o1.length - o2.length }, "aaa" to 1, "bb" to 2)
 
     println(map1.javaClass)
     println(map2.javaClass)
@@ -413,7 +414,7 @@ fun mapFun1() {
     println(map3)
     println(map4)
     println(map5)
-    println(map6)
+   // println(map6)
 
 }
 
