@@ -25,6 +25,7 @@ fun main() {
     reflexTest1()
 
     /**
+
     从KClass 获取类信息
      */
     reflexTest2()
@@ -38,6 +39,32 @@ fun main() {
      */
     reflexTest3()
 
+
+    /**
+
+    构造器引用
+    构造器的本质是一个函数，即一个返回值为当前类实例的函数。因此程序可将构造器引用当成函数使用。
+    此外， Kotlin 允许通过使用【"::"操作符并添加类名】来引用该类的主构造器。
+     */
+    reflexTest4()
+
+    /**
+    调用方法
+    所有构造器和方法都属于KFunction 的实例，因此它们都可以通过call()方法来调用。
+    所以，程序要调用指定类的方法，只要先获取方法的KFunction 实例，然后调用call（）方法即可。
+    使用KFunction 调用方法时，有一点需要说明： 由于方法是面向对象的概念，因此它有一个主调者
+     */
+    reflexTest5()
+
+    /**
+    函数引用
+    Kotlin 的函数也是一等公民， 函数也有其自身的类型。Kotlin 程序可以获取函数的引用，把函数当成参数传入另一个函数中。
+    Kotlin 也通过"::"符号加函数名的形式来获取特定函数的引用。当存在多个重载函数时，
+    Kotlin 可通过上下文推断出实际引用的是哪个函数： 如果Kotlin 无法通过上下文准确推断出引用哪个函数，编译器就会报错。
+     */
+    reflexTest6()
+
+    // P308页
 
 }
 
@@ -191,5 +218,70 @@ fun reflexTest3() {
         }
     }
 }
+
+fun reflexTest4() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+
+    class Foo(val name: String) {
+        var age: Int = 0
+
+        constructor(name: String, age: Int) : this(name) {
+            this.age = age
+        }
+    }
+
+    fun testCons(con: (String, Int) -> Foo) {
+        val con1 = con("hello", 12)
+        println("name = ${con1.name},age = ${con1.age}")
+
+    }
+
+    testCons(::Foo)
+}
+
+fun reflexTest5() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    class Foo {
+
+        fun test1(name: String) {
+            println(" --> name = $name")
+        }
+
+        fun test1(name: String, age: Int) {
+            println(" --> name = $name,age = $age")
+        }
+    }
+
+    val kClass = Foo::class
+    val functions = kClass.declaredFunctions
+    for (con in functions) {
+        // 两个参数：对象实例+params
+        if (con.parameters.size == 2) {
+            con.call(kClass.createInstance(), "hello")
+        }
+        // 三个参数：对象实例+params
+        if (con.parameters.size == 3) {
+            con.call(kClass.createInstance(), "hello", 100)
+        }
+    }
+
+}
+
+fun reflexTest6() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+    val intList = listOf<Int>(1, 2, 3, 4, 5, 6)
+    val strList = listOf<String>("a", "ab", "abc", "abcd")
+    println(intList.filter(::filter))
+    println(strList.filter(::filter))
+
+}
+
+fun filter(item: Int) = item > 2
+fun filter(item: String) = item.length > 2
+
+
+
 
 
