@@ -1,5 +1,6 @@
 package part13
 
+import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.*
 
 
@@ -61,10 +62,44 @@ fun main() {
     Kotlin 的函数也是一等公民， 函数也有其自身的类型。Kotlin 程序可以获取函数的引用，把函数当成参数传入另一个函数中。
     Kotlin 也通过"::"符号加函数名的形式来获取特定函数的引用。当存在多个重载函数时，
     Kotlin 可通过上下文推断出实际引用的是哪个函数： 如果Kotlin 无法通过上下文准确推断出引用哪个函数，编译器就会报错。
+
+    此外需要说明的是，如果需要引用类的成员方法或扩展方法，那么需要进行限定。例如
+    String::toCharArray 才能表明引用String 的toCharArray()方法，单纯地使用 ::toCharArray()不行。
+    String::toCharArray 函数引用的类型也不是简单的()->CharArray 类型，而是String.() ->CharArray 类型。
+
      */
     reflexTest6()
+    reflexTest7()
 
-    // P308页
+    /**
+    访问属性值
+
+    获取KCla ss 对象之后，也可通过KClass 对象来获取该类所包含的属性。Kotlin 为属性提供了众多的API 。
+
+    1、  KProperty ： 代表通用的属性。它是 KCallable 的子接口。
+    2、  KMutableProperty ： 代表通用的读写属性。它是 KProperty 的子接口。
+    3、  KProperty0 ： 代表无需调用者的属性（静态属性）。它是 KProperty 的子接口。
+    4、  KMutablePropertyO ： 代表无需调用者的读写属性（静态读写属性〉。它是 KProperty0 的子接口。
+    5、  KProperty1 ： 代表需要1 个调用者的属性（成员属性）。。它是KProperty的子接口。
+    6、  KMutableProperty1 ： 代表需要1 个调用者的读写属性（成员读写属性）。它是 KProperty1 的子接口
+    7、  KProperty2 ：代表需要2 个调用者的属性（扩展属性） 。它是KProperty的子接口。
+    8、  KMutableProperty2： 代表需要2 个调用者的读写属性（扩展读写属性） 。它是KProperty2的子接口。
+
+
+    程序获取代表属性的KProperty 对象之后，可调用get()方法来获取属性的值；
+    如果程序要设置属性的值，则需要获取代表属性的 KMutableProperty 即对象。
+     */
+    reflexTest8()
+
+
+    /**
+    属性引用
+
+    Kotlin 同样提供了"::"符号加属性名的形式来获取属性引用，获取属性引用也属于前面介绍的 KProperty 及其子接口的实例。
+    获取 Kotlin 只读属性的引用之后，程序可调用get() 方法来获取属性的值；
+    获取 Kotlin 读写属性的引用之后，程序可调用set()方法来修改属性的值，也可调用get（）方法来获取属性的值。
+     */
+    reflexTest9()
 
 }
 
@@ -280,6 +315,94 @@ fun reflexTest6() {
 
 fun filter(item: Int) = item > 2
 fun filter(item: String) = item.length > 2
+
+
+fun reflexTest7() {
+    // 获取数的平方根，但该函数要做一些额外处理:
+    // 如果该数是正数，则直接获取平方根；如果该数是负数，则获取该数的绝对值的平方根。
+    fun abs(d: Double): Double = if (d > 0) d else -d
+    fun sqrt(d: Double): Double = kotlin.math.sqrt(d)
+
+
+    fun f(abs: (Double) -> Double, sqrt: (Double) -> Double): (Double) -> Double {
+        return { d: Double -> sqrt(abs(d)) }
+    }
+
+    val f = f(::abs, ::sqrt)
+    val result = f(0.64)
+    println(result)
+
+}
+
+fun reflexTest8() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    data class Item(var name: String = "rrc", val age: Int = 12)
+
+    val kClass = Item::class
+    val ins = kClass.createInstance()
+    //获取所有的属性
+    val props = kClass.declaredMemberProperties
+    props.forEach {
+        when (it.name) {
+            "name" -> {
+                //将属性转换为一个调用者的读写属性
+                val nameProp = it as KMutableProperty1<Item, Any>
+                //修改属性的值
+                nameProp.set(ins, "hello world")
+            }
+            "age" -> {
+                //只读属性，只能通过get方法获取属性值
+                println(it.get(ins))
+            }
+        }
+    }
+    println(ins.toString())
+
+}
+
+
+var exf = "hello"
+
+class MyItem(var name: String = "rrc", val age: Int = 12) {
+
+    companion object {
+        var city = "abc"
+
+    }
+
+    fun show() {
+        println("[name = $name,age = $age,city = $city]")
+    }
+}
+
+fun reflexTest9() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+
+    val ins = MyItem("RRC", 100)
+
+    //获取exf 属性，属于KMutablePropertyO 的实例
+    val exfProp = ::exf
+    exfProp.set("hello_ex")
+    println(exfProp.get())
+
+    //获取MyItem 的name 属性，属于KMutableProperty1的实例
+    val nameProp = MyItem::name
+    nameProp.set(ins, "RRC_HELLO")
+
+    //获取MyItem 的price 属性，属于KProperty1 的实例
+    val ageProp = MyItem::age
+    println(ageProp.get(ins))
+
+    // 获取MyItem的Companion的City属性，属于属于KProperty0 的实例
+    val cityProp = MyItem.Companion::city
+    cityProp.set("city_com")
+    println(cityProp.get())
+
+    ins.show()
+
+}
 
 
 
