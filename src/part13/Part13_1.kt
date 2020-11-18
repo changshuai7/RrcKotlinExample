@@ -1,7 +1,11 @@
 package part13
 
+import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.*
+import kotlin.reflect.jvm.javaField
+import kotlin.reflect.jvm.javaGetter
+import kotlin.reflect.jvm.javaSetter
 
 
 /**
@@ -16,10 +20,13 @@ fun main() {
     /**
     ================== 类引用 ==================
 
+
     Kotlin 的类引用是 KClass 对象
     Java 的类引用是 java.lang.Class 对象
 
+
     通过任意对象，引用class属性，可以获取KClass对象（ MyObj::class ）
+
     通过KClass 获取对应的java.lang.Class 对象，则可调用KClass 对象的java 属性。( MyObj::class.java )
 
      */
@@ -46,6 +53,13 @@ fun main() {
     构造器引用
     构造器的本质是一个函数，即一个返回值为当前类实例的函数。因此程序可将构造器引用当成函数使用。
     此外， Kotlin 允许通过使用【"::"操作符并添加类名】来引用该类的主构造器。
+
+
+    在某些时候，如果要获取 Kotlin 构造器引用对应的Java 构造器对象（ Constructor ）
+    则可通过调用KFunction 的扩展属性javaConstructor 来实现。
+    例如如下代码：
+    ::Foo. javaConstructor
+
      */
     reflexTest4()
 
@@ -66,6 +80,11 @@ fun main() {
     此外需要说明的是，如果需要引用类的成员方法或扩展方法，那么需要进行限定。例如
     String::toCharArray 才能表明引用String 的toCharArray()方法，单纯地使用 ::toCharArray()不行。
     String::toCharArray 函数引用的类型也不是简单的()->CharArray 类型，而是String.() ->CharArray 类型。
+
+    在某些时候，如果要获取Kotlin 函数引用对应的Java 方法对象（ Method ）
+    则可通过调用KFunction 的扩展属性javaMethod 来实现。
+    例如如下代码：
+    ::abs.javaMethod
 
      */
     reflexTest6()
@@ -100,6 +119,26 @@ fun main() {
     获取 Kotlin 读写属性的引用之后，程序可调用set()方法来修改属性的值，也可调用get（）方法来获取属性的值。
      */
     reflexTest9()
+
+    /**
+    由于Kotlin 属性会对应于Java 的3 种成员，因此 KProperty 包含如下3 个扩展属性。
+    1、javaField ： 获取该属性的幕后宇段（如果该属性有幕后字段的话〉。该属性返回java.lang.reflect.Field 对象。
+    2、javaGetter： 获取该属性的getter方法。该属性返回java.lang.reflect.Method 对象。
+    3、javaSetter ：获取该属性的setter方法（如果该属性是读写属性的话） 。该属性返回java.lang.reflect.Method 对象。
+    一旦获取了Kotlin 属性的幕后字段的Field 对象、getter和setter 方法的Method 对象之后，剩下的就是Java 反射的事了。
+     */
+    reflexTest10()
+
+    /**
+    绑定的方法和属性引用
+    前面介绍的都是通过 KClass (类本身)来获取方法或属性的引用的
+    当函数或属性不在任何类中定义时，程序直接使用“：：”加函数名（或属性名）的形式来获取函数或属性的引用，
+    这些函数或属性都没有绑定任何对象，因此调用函数或属性时第一个参数必须传入调用者。
+
+    从Kotlin 1.1 开始， Kotlin 支持一种“绑定的方法或属性引用”
+    这种方法或属性引用不是通过类获取的，而是【通过对象获取的】，这意味着该方法或属性己经绑定了调用者，因此程序执行这种方法或属性时无须传入调用者。
+     */
+    reflexTest11()
 
 }
 
@@ -395,7 +434,7 @@ fun reflexTest9() {
     val ageProp = MyItem::age
     println(ageProp.get(ins))
 
-    // 获取MyItem的Companion的City属性，属于属于KProperty0 的实例
+    // 获取MyItem的Companion的City属性，属于KMutableProperty0 的实例
     val cityProp = MyItem.Companion::city
     cityProp.set("city_com")
     println(cityProp.get())
@@ -403,6 +442,71 @@ fun reflexTest9() {
     ins.show()
 
 }
+
+fun reflexTest10() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    //获取exf属性，属于KMutablePropertyO 的实例
+    val exfProp = ::exf
+    println(exfProp.javaField)
+    println(exfProp.javaGetter)
+    println(exfProp.javaSetter)
+
+    println()
+
+    //获取MyItem 的name 属性，属于KMutableProperty1 的实例
+    val nameProp = MyItem::name
+    println(nameProp.javaField)
+    println(nameProp.javaGetter)
+    println(nameProp.javaSetter)
+
+    println()
+
+    //获取MyItem 的price 属性， 属于KProperty1 的实例
+    val ageProp = MyItem::age
+    println(ageProp.javaField)
+    println(ageProp.javaGetter)
+
+    println()
+
+    //获取MyItem.Companion的city属性，属于KMutableProperty0 的实例
+    val cityProp: KMutableProperty0<String> = MyItem.Companion::city
+    println(cityProp::class.simpleName)
+    println(cityProp.javaField)
+    println(cityProp.javaGetter)
+    println(cityProp.javaSetter)
+
+}
+
+fun reflexTest11() {
+    println("\n==========${Thread.currentThread().stackTrace[1].methodName}===========")
+
+    val str = "Kotlin"
+    //获取对象绑定的方法
+    val f: (String, Boolean) -> Boolean = str::endsWith
+    //调用绑定的方法时无须传入调用者
+    println(f("lin", false)) //输出true
+
+    //获取对象绑定的属性
+    val lenProp = str::length
+    //调用绑定的属性时无须传入调用者
+    println(lenProp.get()) //输出6
+
+
+    println("----------")
+
+    val list = listOf<String>("a", "b", "c", "d", "e")
+    //获取对象绑定的方法
+    val fl = list::subList
+    //调用绑定的方法无须传入调用者
+    println(fl(1, 3))
+
+    val fin = list::indices
+    println(fin.get()) //输出0..4
+
+
+}
+
 
 
 
