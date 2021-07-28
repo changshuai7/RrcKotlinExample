@@ -240,7 +240,7 @@ fun setFun2() {
     //9.将每个集合元素映射成新值，返回所有新值组成的Set 集合
     println(set.map { "new-$it" })
     //10.获取最大值(自然排序/比较器排序决定)
-    println("max = ${set.max()} , min = ${set.min()}")
+    println("max = ${set.maxOrNull()} , min = ${set.minOrNull()}")
     //11.反转集合，返回反转后的集合
     println(set.reversed())
     //12.取交集/取并集
